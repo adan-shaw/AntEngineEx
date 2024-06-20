@@ -1,7 +1,8 @@
 # Build lib
 
-#set(PRO_NAME "AntEngine-${APP_BTYPE}")
-set(PRO_NAME "AntEngine")
+# 修复-lAntEngine-64 找不到的问题
+set(PRO_NAME "AntEngine-${APP_BTYPE}")
+#set(PRO_NAME "AntEngine")
 set(PRO_VERSION "1.0.0.${BUILD_NUMBER}")
 set(PRO_BRIEF "${PRO_NAME} is a C++ lib.")
 
