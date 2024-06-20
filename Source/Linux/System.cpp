@@ -437,7 +437,7 @@ s32 System::createProcess(usz socket, void*& handle) {
     if (pid > 0) {
         Logger::logInfo("System::createProcess>>fork() pid=%d", pid);
         Logger::flush();
-        handle = (void*)pid;
+        handle = (void*)&pid;
         //exit(0);
         return pid;
     }

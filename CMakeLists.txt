@@ -5,6 +5,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(APP_OS Linux)
     set(DEBUG_FLAGS "-g -O0 -Wall -DEBUG")
     set(RELEASE_FLAGS "-O3")
+    # 修复版本差异: #include <mysql/mysql.h>
+    include_directories("/usr/include/mysql")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(APP_OS Windows)
     set(DEBUG_FLAGS "")
