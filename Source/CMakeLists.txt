@@ -1,8 +1,7 @@
 # Build lib
 
-# 修复-lAntEngine-64 找不到的问题
-set(PRO_NAME "AntEngine-${APP_BTYPE}")
-#set(PRO_NAME "AntEngine")
+#set(PRO_NAME "AntEngine-${APP_BTYPE}")
+set(PRO_NAME "AntEngine")
 set(PRO_VERSION "1.0.0.${BUILD_NUMBER}")
 set(PRO_BRIEF "${PRO_NAME} is a C++ lib.")
 
@@ -15,8 +14,8 @@ aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/Net/RedisClient" SRC_REDIS)
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/${APP_OS}" SRC_OS)
 aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/http_parser" SRC_HTTPARSER)
 aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/jsoncpp" SRC_JSON)
-aux_source_directory("${PROJECT_SOURCE_DIR}/Lib/Linux" SRC_LUA)
-#aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/lua/src" SRC_LUA)
+aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/lua/src" SRC_LUA)
+aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/http-parser" SRC_http-parser)
 aux_source_directory("${PROJECT_SOURCE_DIR}/Lib/Linux" SRC_AntEngine)
 
 link_directories(${LIBRARY_OUTPUT_PATH})
@@ -31,6 +30,7 @@ add_library(${PRO_NAME} STATIC
     ${SRC_SCRIPT}
     ${SRC_HTTPARSER}
     ${SRC_LUA}
+    ${SRC_http-parser}
     ${SRC_AntEngine}
     )
 
@@ -38,6 +38,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/Depend/http_parser
     ${PROJECT_SOURCE_DIR}/Depend/jsoncpp
     ${PROJECT_SOURCE_DIR}/Depend/lua/src
+    ${PROJECT_SOURCE_DIR}/Depend/http-parser
     ${PROJECT_SOURCE_DIR}/Depend/MySQL
     ${PROJECT_SOURCE_DIR}/Depend/MySQL/mysql
     ${PROJECT_SOURCE_DIR}/Depend/openssl/include

@@ -16,9 +16,15 @@ cd ./Depend/lua
 make -j4
 cd ../..
 
+cd ./Depend/http-parser
+make package -j4
+cd ../..
+
+
+
 # 补全依赖的头文件(需要根据linux 系统安装到位才行)
 cd ./Depend
-ln -s /usr/include/mysql
+ln -s /usr/include/mysql MySQL
 ln -s /usr/include/hiredis 
 ln -s /usr/include/openssl 
 cd ..
@@ -37,6 +43,7 @@ cd ..
 # 补全lib 库
 cd ./Lib/Linux
 ln -s ../../Depend/lua/src/liblua.a
+ln -s ../../Depend/http-parser/src/libhttp-parser.a
 
 
 
