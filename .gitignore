@@ -6,12 +6,15 @@ Bin/Temp/
 Bin/Log/
 Bin/GMAP/
 CMakeFiles
+build
 
 
 # files
 .vscode/*.log
-Depend/*.o
-Bin/*.o
+*.o
+*.a
+*.so
+*.dll
 Bin/*.bin
 Bin/*.dll
 Bin/*.pdb
@@ -24,5 +27,6 @@ Build/*/*.user
 Build/*.opendb
 CMakeCache.txt
 *.cmake
-
+Depend/lua/src/lua
+Depend/lua/src/luac
 
