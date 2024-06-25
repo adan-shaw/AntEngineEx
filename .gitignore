@@ -1,13 +1,10 @@
 # paths
-Build/ipch/
-Build/.vs/
 Lib/
 Bin/Temp/
 Bin/Log/
 Bin/GMAP/
 CMakeFiles
 build
-
 
 # files
 .vscode/*.log
@@ -22,11 +19,14 @@ Bin/*.exe
 Bin/*.iobj
 Bin/*.ipdb
 Bin/*.ilk
-Build/*.db
-Build/*/*.user
-Build/*.opendb
 CMakeCache.txt
 *.cmake
 Depend/lua/src/lua
 Depend/lua/src/luac
 
+# win
+Build4win/ipch/
+Build4win/.vs/
+Build4win/*.db
+Build4win/*/*.user
+Build4win/*.opendb
