@@ -1,4 +1,4 @@
-﻿#include "Script/ScriptManager.h"
+#include "Script/ScriptManager.h"
 #include <stdarg.h>
 #include "Logger.h"
 #include "Engine.h"

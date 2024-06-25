@@ -50,42 +50,4 @@ void Futex::lock() {
     s32 val = 0;
     while (!mValue.compare_exchange_strong(val, 1)) {
         s32 ret = futex(reinterpret_cast<s32*>(&mValue), FUTEX_WAIT, 1, NULL, NULL, 0);
-        // 判断被唤醒后,再占有futex，此时mLock是否会被futex改为0
-        printf("Futex: mValue = %d\n", mValue.load());
-        if (-1 == ret && EAGAIN != errno) {
-            printf("Futex: lock err=%d, errno=%d\n", ret, errno);
-        }
-        val = 0;
-    }
-}
-
-
-void Futex::unlock() {
-    tryUnlock();
-}
-
-
-bool Futex::tryLock() {
-    s32 val = 0;
-    return mValue.compare_exchange_strong(val, 1); //__sync_bool_compare_and_swap(&mValue, 0, 1);
-}
-
-bool Futex::tryUnlock() {
-    s32 val = 1;
-    if (mValue.compare_exchange_strong(val, 0)) { //__sync_bool_compare_and_swap(&mValue, 1, 0)
-        /*这里有一个情况是，将futex值改为0后，还没进行下一步唤醒，此时有新线程过来,
-        则新线程会获得futex的所有权*/
-        s32 ret = futex(reinterpret_cast<s32*>(&mValue), FUTEX_WAKE, 1, NULL, NULL, 0);
-        if (-1 == ret) {
-            printf("Futex: unlock err=%d\n", ret);
-        }
-        return true;
-    }
-    return false;
-}
-
-
-} // namespace app
-
-
-#endif
+        // 鍒ゆ柇琚

@@ -94,7 +94,7 @@ bool RedisCommand::launch(u32 argc, const s8** argv, const u32* lens) {
         mRequestBuf = nullptr;
         mRequestSize = 0;
     }
-    u64 allsz = 13ULL + 13ULL * argc + 1; //0xFFFFFFFF ◊Ó¥Û10Œª
+    u64 allsz = 13ULL + 13ULL * argc + 1; //0xFFFFFFFF ÊúÄÂ§ß10‰Ωç
     for (u32 i = 0; i < argc; ++i) {
         allsz += lens[i];
     }
@@ -128,7 +128,7 @@ bool RedisCommand::relaunch(u32 slot, const s8* iport, s32 itype) {
                 mCluster->getMaxRedirect(), mRequestCount);
             return false;
         }
-        //÷ÿ∂®œÚªÚ‘≠≤€Œª…œ÷ÿ ‘
+        //ÈáçÂÆöÂêëÊàñÂéüÊßΩ‰Ωç‰∏äÈáçËØï
         mPool = itype > 1 ? mCluster->getByAddress(iport) : mCluster->getBySlot(slot);
         if (!mPool) {
             Logger::logError("RedisCommand::relaunch>>can't get pool, slot=%u, IP=%s", slot, iport ? iport : "");
@@ -139,7 +139,7 @@ bool RedisCommand::relaunch(u32 slot, const s8* iport, s32 itype) {
             mCluster->setSlot(slot, mPool);
         }
     } else {
-        //∑«ºØ»∫ƒ£ Ωœ¬÷ÿ ‘
+        //ÈùûÈõÜÁæ§Ê®°Âºè‰∏ãÈáçËØï
         if (!mPool) {
             Logger::logError("RedisCommand::relaunch>>can't retry, slot=%u, IP=%s", slot, iport ? iport : "");
             return false;

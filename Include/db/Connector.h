@@ -109,7 +109,7 @@ private:
     EErrorCode execute(Task* task);
 
     /**
-     * @brief Èç¹û¾ä±úÉĞÎ´Á¬½Ó£¬½«×èÈû²¢Á¬½Ó¡£
+     * @brief å¦‚æœå¥æŸ„å°šæœªè¿æ¥ï¼Œå°†é˜»å¡å¹¶è¿æ¥ã€‚
      * @return true if success, else false.
      */
     bool connect();

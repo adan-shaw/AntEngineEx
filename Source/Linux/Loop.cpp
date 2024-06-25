@@ -195,7 +195,7 @@ void Loop::updatePending() {
                 }
             } else {
                 //@see HandleTCP::connect()
-                //�Ѿ��ڷ���connectʱ��closeHandle(hnd);
+                //锟窖撅拷锟节凤拷锟斤拷connect时锟斤拷closeHandle(hnd);
             }
             nd->mCall(nd);
             unbindFly(hnd);

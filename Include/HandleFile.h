@@ -63,12 +63,12 @@ public:
     }
 
     /**
-    * @param offset д����ʼ��
+    * @param offset 写锟斤拷锟斤拷始锟斤拷
     */
     s32 write(RequestFD* it, usz offset = 0);
 
     /**
-    * @param offset ��ȡ��ʼ��
+    * @param offset 锟斤拷取锟斤拷始锟斤拷
     */
     s32 read(RequestFD* it, usz offset = 0);
 
@@ -82,7 +82,7 @@ public:
     */
     s32 open(const String& fname, s32 flag = 1);
 
-    //�ضϻ���չ�ļ�
+    //锟截断伙拷锟斤拷展锟侥硷拷
     bool setFileSize(usz fsz);
 
 protected:

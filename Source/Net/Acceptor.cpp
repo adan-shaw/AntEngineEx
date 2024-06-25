@@ -36,7 +36,7 @@ Acceptor::Acceptor(Loop& loop, FuncReqCallback func, RefCount* iUser) :
     mLoop(loop) {
     mTCP.setClose(EHT_TCP_ACCEPT, Acceptor::funcOnClose, this);
 
-    //acceptÎÞÐè¼ÓÈëÊ±¼ä¶Ñ
+    //acceptæ— éœ€åŠ å…¥æ—¶é—´å †
     mTCP.setTime(nullptr, 30 * 1000, 60 * 1000, -1);
 
     setUser(iUser);

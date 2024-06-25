@@ -96,7 +96,7 @@ void AppMySQLtest(s32 argc, s8** argv) {
         task = new db::Task(DBCallBack, 10);
         //snprintf(tmp, sizeof(tmp), "(%llu,\"myname%d\")", 18023030000 + i, i);
         snprintf(tmp, sizeof(tmp), "{\"json\":%d}", i);
-        db::Task::Arg arg(tmp); //转义时需用Arg
+        db::Task::Arg arg(tmp); //杞箟鏃堕渶鐢ˋrg
         *task
             << "INSERT INTO " << TEST_DB
             << ".User (mobile,name) values ("

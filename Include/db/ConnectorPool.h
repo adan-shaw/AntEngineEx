@@ -15,7 +15,7 @@ class Database;
 
 
 /**
-* @brief 数据库连接池
+* @brief 鏁版嵁搴撹繛鎺ユ睜
 */
 class ConnectorPool {
     friend Database;
@@ -51,17 +51,4 @@ private:
 
 
     /**
-    * @brief 将连接还回数据库连接池
-    */
-    void push(Connector* con);
-
-    /**
-    * @return 返回关闭的连接数量
-    */
-    usz close();
-};
-
-} //namespace db
-} //namespace app
-
-#endif //APP_DB_CONNECTORPOOL_H
+    * @brief 灏嗚繛鎺ヨ繕鍥炴暟鎹

@@ -79,7 +79,7 @@ public:
 
     /**
     * @brief open a pool
-    * @param passowrd Îª¿ÕÔòÊ¹ÓÃÄ¬ÈÏÃÜÂë
+    * @param passowrd ä¸ºç©ºåˆ™ä½¿ç”¨é»˜è®¤å¯†ç 
     */
     RedisClientPool* open(const s8* ipport, u32 maxTCP = 0, const s8* passowrd = nullptr);
 
@@ -95,7 +95,7 @@ public:
     void setPassword(const s8* ipport, const s8* passowrd);
 
     /**
-    * @param passowrd ÉèÖÃÄ¬ÈÏÃÜÂë
+    * @param passowrd è®¾ç½®é»˜è®¤å¯†ç 
     */
     void setPassword(const s8* passowrd) {
         if (passowrd) {

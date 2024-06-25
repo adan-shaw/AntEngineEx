@@ -68,8 +68,8 @@ void HandleTLS::init(const TlsContext& tlsCTX) {
         DASSERT(ssl_ctx);
         mTlsSession = new TlsSession(ssl_ctx, &mInBuffers, &mOutBuffers);
     }
-    mRead.mUser = nullptr; //null±íÊ¾Î´ÔÚÊ¹ÓÃÖÐ£¬·ñÔòÎªÕ¼ÓÃÖÐ
-    mWrite.mUser = nullptr; //null±íÊ¾Î´ÔÚÊ¹ÓÃÖÐ£¬·ñÔòÎªÕ¼ÓÃÖÐ
+    mRead.mUser = nullptr; //nullè¡¨ç¤ºæœªåœ¨ä½¿ç”¨ä¸­ï¼Œå¦åˆ™ä¸ºå ç”¨ä¸­
+    mWrite.mUser = nullptr; //nullè¡¨ç¤ºæœªåœ¨ä½¿ç”¨ä¸­ï¼Œå¦åˆ™ä¸ºå ç”¨ä¸­
     mHostName[0] = 0;
     mCommitPos = mOutBuffers.getHead();
 }
@@ -424,7 +424,7 @@ void HandleTLS::onReadHello(RequestFD* it) {
                     RequestFD* oit = AppPopRingQueueHead_1(mFlyWrites);
                     DASSERT(oit);
                     if (oit) {
-                        //»Øµ÷ÖÐ×ÔÐÐ¾ö¶¨ÊÇ·ñÒªÑéÖ¤ÓòÃûÖ¤Êé£¬ HandleTLS::verify(1, "www.baidu.com");
+                        //å›žè°ƒä¸­è‡ªè¡Œå†³å®šæ˜¯å¦è¦éªŒè¯åŸŸåè¯ä¹¦ï¼Œ HandleTLS::verify(1, "www.baidu.com");
                         oit->mError = 0;
                         oit->mCall(oit);
                     }

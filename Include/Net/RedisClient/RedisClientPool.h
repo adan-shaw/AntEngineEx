@@ -42,7 +42,7 @@ class RedisClientCluster;
 
 
 /**
- * @brief redis 连接池类
+ * @brief redis 杩炴帴姹犵被
  */
 class RedisClientPool {
 public:
@@ -55,7 +55,7 @@ public:
     }
 
     /**
-     * 获得本连接池所对应的db
+     * 鑾峰緱鏈繛鎺ユ睜鎵�瀵瑰簲鐨刣b
      * @return id of db
      */
     s32 getDatabaseID() const {
@@ -74,7 +74,7 @@ public:
 
     /**
      *
-     * @param dbnum id of db, range[0-15], 在非集群模式下设置连接建立后所选择的db
+     * @param dbnum id of db, range[0-15], 鍦ㄩ潪闆嗙兢妯″紡涓嬭缃繛鎺ュ缓绔嬪悗鎵�閫夋嫨鐨刣b
      */
     void open(const net::NetAddress& serverIP, s32 maxTCP, const s8* passowrd, s32 dbnum = 0);
 
