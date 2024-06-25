@@ -953,4 +953,72 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
   status = luaD_rawrunprotected(L, func, u);
   if (l_unlikely(status != LUA_OK)) {  /* an error occurred? */
     L->ci = old_ci;
-    
+    L->allowhook = old_allowhooks;
+    status = luaD_closeprotected(L, old_top, status);
+    luaD_seterrorobj(L, status, restorestack(L, old_top));
+    luaD_shrinkstack(L);   /* restore stack size in case of overflow */
+  }
+  L->errfunc = old_errfunc;
+  return status;
+}
+
+
+
+/*
+** Execute a protected parser.
+*/
+struct SParser {  /* data to 'f_parser' */
+  ZIO *z;
+  Mbuffer buff;  /* dynamic structure used by the scanner */
+  Dyndata dyd;  /* dynamic structures used by the parser */
+  const char *mode;
+  const char *name;
+};
+
+
+static void checkmode (lua_State *L, const char *mode, const char *x) {
+  if (mode && strchr(mode, x[0]) == NULL) {
+    luaO_pushfstring(L,
+       "attempt to load a %s chunk (mode is '%s')", x, mode);
+    luaD_throw(L, LUA_ERRSYNTAX);
+  }
+}
+
+
+static void f_parser (lua_State *L, void *ud) {
+  LClosure *cl;
+  struct SParser *p = cast(struct SParser *, ud);
+  int c = zgetc(p->z);  /* read first character */
+  if (c == LUA_SIGNATURE[0]) {
+    checkmode(L, p->mode, "binary");
+    cl = luaU_undump(L, p->z, p->name);
+  }
+  else {
+    checkmode(L, p->mode, "text");
+    cl = luaY_parser(L, p->z, &p->buff, &p->dyd, p->name, c);
+  }
+  lua_assert(cl->nupvalues == cl->p->sizeupvalues);
+  luaF_initupvals(L, cl);
+}
+
+
+int luaD_protectedparser (lua_State *L, ZIO *z, const char *name,
+                                        const char *mode) {
+  struct SParser p;
+  int status;
+  incnny(L);  /* cannot yield during parsing */
+  p.z = z; p.name = name; p.mode = mode;
+  p.dyd.actvar.arr = NULL; p.dyd.actvar.size = 0;
+  p.dyd.gt.arr = NULL; p.dyd.gt.size = 0;
+  p.dyd.label.arr = NULL; p.dyd.label.size = 0;
+  luaZ_initbuffer(L, &p.buff);
+  status = luaD_pcall(L, f_parser, &p, savestack(L, L->top.p), L->errfunc);
+  luaZ_freebuffer(L, &p.buff);
+  luaM_freearray(L, p.dyd.actvar.arr, p.dyd.actvar.size);
+  luaM_freearray(L, p.dyd.gt.arr, p.dyd.gt.size);
+  luaM_freearray(L, p.dyd.label.arr, p.dyd.label.size);
+  decnny(L);
+  return status;
+}
+
+

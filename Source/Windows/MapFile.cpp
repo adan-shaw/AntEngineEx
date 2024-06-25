@@ -31,7 +31,7 @@
 
 namespace app {
 
-//"Gobal\\%s" éœ€è¦è·¨ç”¨æˆ·æƒé™(admin)ï¼Œæˆ‘ä»¬åªéœ€è¦åŒç”¨æˆ·å¤šè¿›ç¨‹å…±äº«
+//"Gobal\\%s" ĞèÒª¿çÓÃ»§È¨ÏŞ(admin)£¬ÎÒÃÇÖ»ĞèÒªÍ¬ÓÃ»§¶à½ø³Ì¹²Ïí
 static const s8* G_MEM_FMT = "Local\\%s";
 
 MapFile::MapFile() :

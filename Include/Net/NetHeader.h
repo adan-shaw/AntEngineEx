@@ -46,16 +46,16 @@ struct SHeadIP {
         EPT_TCP = 6,
         EPT_UDP = 17
     };
-    u8  mVerAndSize;        // 四位IP版本号，四位首部长度
-    u8  mType;              // 服务类型
-    u16 mTotalSize;         // 总的数据包长度
-    u16 mIdent;             // 特殊标识符
-    u16 mFlag;              // 3位标志位,13位片位移
-    u8  mTTL;               // 存在时间
-    u8  mProtocol;          // 协议（TCP，UDP等）
-    u16 mChecksum;          // IP校验和=ip头部
-    u32 mLocalIP;           // 源地址
-    u32 mRemoteIP;          // 目标地址
+    u8  mVerAndSize;        // ��λIP�汾�ţ���λ�ײ�����
+    u8  mType;              // ��������
+    u16 mTotalSize;         // �ܵ����ݰ�����
+    u16 mIdent;             // �����ʶ��
+    u16 mFlag;              // 3λ��־λ,13λƬλ��
+    u8  mTTL;               // ����ʱ��
+    u8  mProtocol;          // Э�飨TCP��UDP�ȣ�
+    u16 mChecksum;          // IPУ���=ipͷ��
+    u32 mLocalIP;           // Դ��ַ
+    u32 mRemoteIP;          // Ŀ���ַ
 
     //3bit flags
     DINLINE void setFlag(u16 it) {
@@ -146,27 +146,27 @@ struct SHeadIP {
 };
 
 struct SHeadICMP {
-    u8  mType;                 //ICMP报文头
-    u8  mCode;                 //ICMP代码
-    u16 mChecksum;             //检验和=ICMP头+数据
-    u16 mID;                   //标识符
-    u16 mSN;                   //序列号
-    u32 mTimestamp;            //时间戳
+    u8  mType;                 //ICMP����ͷ
+    u8  mCode;                 //ICMP����
+    u16 mChecksum;             //�����=ICMPͷ+����
+    u16 mID;                   //��ʶ��
+    u16 mSN;                   //���к�
+    u32 mTimestamp;            //ʱ���
 };
 
 struct SHeadOptionIP {
-    u8 mType;           // 选项类型
-    u8 mSize;           //选项头的长度
-    u8 mOffset;         //地址偏移量 
-    u32 mAddress[9];    // IP地址列表
+    u8 mType;           // ѡ������
+    u8 mSize;           //ѡ��ͷ�ĳ���
+    u8 mOffset;         //��ַƫ���� 
+    u32 mAddress[9];    // IP��ַ�б�
 };
 
 struct SFakeHeadTCP {
-    u32 mLocalIP;        //源地址
-    u32 mRemoteIP;       //目的地址
-    u8  mPadding;        //填充位，取0
-    u8  mProtocol;       //协议类型
-    u16 mSizeofTCP;      //整个TCP长度=SHeadTCP+SHeadOptionTCP+data(如果有), 不包括SFakeHeadTCP。
+    u32 mLocalIP;        //Դ��ַ
+    u32 mRemoteIP;       //Ŀ�ĵ�ַ
+    u8  mPadding;        //���λ��ȡ0
+    u8  mProtocol;       //Э������
+    u16 mSizeofTCP;      //����TCP����=SHeadTCP+SHeadOptionTCP+data(�����), ������SFakeHeadTCP��
 
     DINLINE void setSize(u16 it) {
 #if defined(DENDIAN_BIG)
@@ -179,21 +179,21 @@ struct SFakeHeadTCP {
 
 struct SHeadTCP {
     enum EFlag {
-        EFLAG_URG = 0x20,   //紧急标志，和紧急指针配合使用，当其为1时表示，此报文要尽快传送。
-        EFLAG_ACK = 0x10,   //确认标志，和确认号字段配合使用，当ACK位置1时，确认号字段有效。
-        EFLAG_PSH = 0x08,   //为推送标志，置1时，发送方将立即发送缓冲区中的数据。
-        EFLAG_RST = 0x04,   //复位标志，置1时，表明有严重差错，必须释放连接。
-        EFLAG_SYN = 0x02,   //同步标志，置1时，表示请求建立连接。
-        EFLAG_FIN = 0x01    //终止标志，置1时，表明数据已经发送完，请求释放连接。
+        EFLAG_URG = 0x20,   //������־���ͽ���ָ�����ʹ�ã�����Ϊ1ʱ��ʾ���˱���Ҫ���촫�͡�
+        EFLAG_ACK = 0x10,   //ȷ�ϱ�־����ȷ�Ϻ��ֶ����ʹ�ã���ACKλ��1ʱ��ȷ�Ϻ��ֶ���Ч��
+        EFLAG_PSH = 0x08,   //Ϊ���ͱ�־����1ʱ�����ͷ����������ͻ������е����ݡ�
+        EFLAG_RST = 0x04,   //��λ��־����1ʱ�����������ز���������ͷ����ӡ�
+        EFLAG_SYN = 0x02,   //ͬ����־����1ʱ����ʾ���������ӡ�
+        EFLAG_FIN = 0x01    //��ֹ��־����1ʱ�����������Ѿ������꣬�����ͷ����ӡ�
     };
-    u16 mLocalPort;          //16位源端口
-    u16 mRemotePort;         //16位目的端口
-    u32 mSN;                 //32位序列号
-    u32 mACK;                //32位确认号
-    u16 mSizeReserveFlag;    //4位TCP头长度,6位保留位,6位标志位
-    u16 mWindow;             //16位窗口大小
-    u16 mChecksum;           //16位校验和=tcp伪头部+tcp头部+data(如果有)
-    u16 mOffset;             //16位紧急数据偏移量
+    u16 mLocalPort;          //16λԴ�˿�
+    u16 mRemotePort;         //16λĿ�Ķ˿�
+    u32 mSN;                 //32λ���к�
+    u32 mACK;                //32λȷ�Ϻ�
+    u16 mSizeReserveFlag;    //4λTCPͷ����,6λ����λ,6λ��־λ
+    u16 mWindow;             //16λ���ڴ�С
+    u16 mChecksum;           //16λУ���=tcpαͷ��+tcpͷ��+data(�����)
+    u16 mOffset;             //16λ��������ƫ����
 
     //Get SN, in OS endian.
     DINLINE u32 getSN() const {
@@ -307,8 +307,8 @@ struct SHeadOptionTCP {
         ETYPE_SACK_PERMITTED = 0x4,   //SACK permitted
         ETYPE_TIMESTAMP = 0x8,      //Timestamp
     };
-    u8 mType;           //选项类型
-    u8 mSize;           //选项头的长度
+    u8 mType;           //ѡ������
+    u8 mSize;           //ѡ��ͷ�ĳ���
     u16 mMSS;           //MSS
     u8 mOther[8];       //Other options
 
@@ -331,22 +331,22 @@ struct SHeadUDP {
 
 //14bytes
 struct SHeadEthernet {
-    u8  mRemoteMAC[6];          //目的MAC地址
-    u8  mLocalMAC[6];           //源MAC地址
-    u16 mType;                  //上一层协议类型，如0x0800代表上一层是IP协议，0x0806为arp
+    u8  mRemoteMAC[6];          //Ŀ��MAC��ַ
+    u8  mLocalMAC[6];           //ԴMAC��ַ
+    u16 mType;                  //��һ��Э�����ͣ���0x0800������һ����IPЭ�飬0x0806Ϊarp
 };
 
 //28bytes
 struct SHeadARP {
-    u16 mHardwareType;      //硬件类型,2字节，定义运行ARP的网络的类型，以太网是类型1
-    u16 mProtocol;          //协议类型,2字节，定义上层协议类型，对于IPV4协议，该字段值为0800
-    u8 mHardwareAddressLen; //硬件地址长度,8位字段，定义对应物理地址长度，以太网中这个值为6
-    u8 mProtocolAddressLen; //协议地址长度,8位字段，定义以字节为单位的逻辑地址长度，对IPV4协议这个值为4
-    u16 mOperation;            //操作字段,数据包类型,ARP请求（值为1），或者ARP应答（值为2）
-    u8 mLocalMAC[6];           //源（发送端）mac地址,可变长度字段，对以太网这个字段是6字节长
-    u8 mLocalIP[4];            //源（发送短）ip地址,发送端协议地址，可变长度字段，对IP协议，这个字段是4字节长
-    u8 mRemoteMAC[6];          //目的（接收端）mac地址
-    u8 mRemoteIP[4];           //目的（接收端）ip地址,注意不能为u_int型，结构体对其
+    u16 mHardwareType;      //Ӳ������,2�ֽڣ���������ARP����������ͣ���̫��������1
+    u16 mProtocol;          //Э������,2�ֽڣ������ϲ�Э�����ͣ�����IPV4Э�飬���ֶ�ֵΪ0800
+    u8 mHardwareAddressLen; //Ӳ����ַ����,8λ�ֶΣ������Ӧ������ַ���ȣ���̫�������ֵΪ6
+    u8 mProtocolAddressLen; //Э���ַ����,8λ�ֶΣ��������ֽ�Ϊ��λ���߼���ַ���ȣ���IPV4Э�����ֵΪ4
+    u16 mOperation;            //�����ֶ�,���ݰ�����,ARP����ֵΪ1��������ARPӦ��ֵΪ2��
+    u8 mLocalMAC[6];           //Դ�����Ͷˣ�mac��ַ,�ɱ䳤���ֶΣ�����̫������ֶ���6�ֽڳ�
+    u8 mLocalIP[4];            //Դ�����Ͷ̣�ip��ַ,���Ͷ�Э���ַ���ɱ䳤���ֶΣ���IPЭ�飬����ֶ���4�ֽڳ�
+    u8 mRemoteMAC[6];          //Ŀ�ģ����նˣ�mac��ַ
+    u8 mRemoteIP[4];           //Ŀ�ģ����նˣ�ip��ַ,ע�ⲻ��Ϊu_int�ͣ��ṹ�����
 };
 
 

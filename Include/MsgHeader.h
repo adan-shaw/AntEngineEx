@@ -33,7 +33,7 @@ namespace app {
 #pragma pack (1)
 
 /**
-* @brief é€šç”¨çš„åè®®åŒ…å¤´
+* @brief Í¨ÓÃµÄÐ­Òé°üÍ·
 */
 struct MsgHeader {
     static u32 gSharedSN;
@@ -43,14 +43,14 @@ struct MsgHeader {
     };
 
     u32 mSize;			    //Packet total bytes
-    u32 mSN;                //å”¯ä¸€åŒ…åº
+    u32 mSN;                //Î¨Ò»°üÐò
     u16 mType;			    //msg Type
     u16 mVersion;			//msg version
-    u16 mItem;			    //ç´¢å¼•åŒºItem count
-    u16 mOffset;            //ç´¢å¼•åŒºåç§»å­—èŠ‚é‡
+    u16 mItem;			    //Ë÷ÒýÇøItem count
+    u16 mOffset;            //Ë÷ÒýÇøÆ«ÒÆ×Ö½ÚÁ¿
 
     /**
-    * @brief æ— è½½è·çš„æ¶ˆæ¯ç±»åž‹ç›´æŽ¥å°åŒ…ï¼Œä¾‹å¦‚: å¿ƒè·³åŒ…
+    * @brief ÎÞÔØºÉµÄÏûÏ¢ÀàÐÍÖ±½Ó·â°ü£¬ÀýÈç: ÐÄÌø°ü
     */
     void finish(u32 iType, u32 iSN, u16 version = 1) {
         mSize = sizeof(*this);
@@ -62,8 +62,8 @@ struct MsgHeader {
     }
 
     /**
-    * @brief æœ‰è½½è·çš„æ¶ˆæ¯ç±»åž‹åˆå§‹åŒ–
-    * @param offset >=MsgHeaderå¤§å°
+    * @brief ÓÐÔØºÉµÄÏûÏ¢ÀàÐÍ³õÊ¼»¯
+    * @param offset >=MsgHeader´óÐ¡
     */
     void init(u16 iType, u16 offset, u16 item = 0, u16 version = 1) {
         DASSERT(offset >= sizeof(*this));
@@ -89,12 +89,12 @@ struct MsgHeader {
         return *(base + idx);
     }
 
-    //@return ç´¢å¼•åŒºå¤§å°
+    //@return Ë÷ÒýÇø´óÐ¡
     u32 getIndexSize()const {
         return sizeof(Item) * mItem;
     }
 
-    //@return ç´¢å¼•åŒºæœ«å°¾
+    //@return Ë÷ÒýÇøÄ©Î²
     s8* getIndexEnd()const {
         DASSERT(mItem > 0);
         Item* base = reinterpret_cast<Item*>(((s8*)this) + mOffset);

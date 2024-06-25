@@ -191,4 +191,97 @@ s64 Timer::getRealTime() {
 #if defined(DOS_WINDOWS)
     static const u64 FILETIME_to_timval_skew = 116444736000000000ULL;
     FILETIME tfile;
-    //杩欎釜鍑芥暟鑾峰彇鍒扮殑鏄
+    //这个函数获取到的是从1601年1月1日到目前经过的纳秒
+    ::GetSystemTimeAsFileTime(&tfile);
+
+    ULARGE_INTEGER _100ns;
+    _100ns.LowPart = tfile.dwLowDateTime;
+    _100ns.HighPart = tfile.dwHighDateTime;
+    _100ns.QuadPart -= FILETIME_to_timval_skew;
+
+    //timeval timenow;
+    //// Convert 100ns units to seconds;
+    //timenow.tv_sec = ( long) (_100ns.QuadPart / (10000 * 1000));
+    //// Convert remainder to microseconds;
+    //timenow.tv_usec = ( long) ((_100ns.QuadPart % (10000 * 1000)) / 10);
+    //return (timenow.tv_sec * 1000000LL + timenow.tv_usec);
+
+    return (_100ns.QuadPart / 10);
+
+#elif defined(DOS_LINUX) || defined(DOS_ANDROID)
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return (ts.tv_sec * 1000000LL + ts.tv_nsec / 1000LL);
+#endif
+}
+
+u64 Timer::getTimeStr(s64 iTime, s8* cache, usz max, const s8* format) {
+    struct tm timeinfo;
+#if defined(DOS_WINDOWS)
+    localtime_s(&timeinfo, &iTime);
+    //gmtime_s(&timeinfo, &rawtime);
+#elif defined(DOS_LINUX) || defined(DOS_ANDROID)
+    localtime_r((time_t*)& iTime, &timeinfo);
+#endif
+    return strftime(cache, max, format, &timeinfo);
+}
+
+u64 Timer::getTimeStr(s8* cache, usz max, const s8* format) {
+    s64 iTime = ::time(nullptr);
+    struct tm timeinfo;
+#if defined(DOS_WINDOWS)
+    localtime_s(&timeinfo, &iTime);
+    //gmtime_s(&timeinfo, &rawtime);
+#elif defined(DOS_LINUX) || defined(DOS_ANDROID)
+    localtime_r((time_t*)& iTime, &timeinfo);
+#endif
+    return strftime(cache, max, format, &timeinfo);
+}
+
+
+u64 Timer::getTimeStr(s64 iTime, wchar_t* cache, usz max, const wchar_t* format) {
+    struct tm timeinfo;
+#if defined(DOS_WINDOWS)
+    localtime_s(&timeinfo, &iTime);
+    //gmtime_s(&timeinfo, &rawtime);
+#elif defined(DOS_LINUX) || defined(DOS_ANDROID)
+    localtime_r((time_t*)& iTime, &timeinfo);
+#endif
+    return wcsftime(cache, max, format, &timeinfo);
+}
+
+u64 Timer::getTimeStr(wchar_t* cache, usz max, const wchar_t* format) {
+    s64 iTime = ::time(nullptr);
+    struct tm timeinfo;
+#if defined(DOS_WINDOWS)
+    localtime_s(&timeinfo, &iTime);
+    //gmtime_s(&timeinfo, &rawtime);
+#elif defined(DOS_LINUX) || defined(DOS_ANDROID)
+    localtime_r((time_t*)& iTime, &timeinfo);
+#endif
+    return wcsftime(cache, max, format, &timeinfo);
+}
+
+
+bool Timer::isLeapYear(u32 iYear) {
+    return ((0 == iYear % 4 && 0 != iYear % 100) || 0 == iYear % 400);
+}
+
+
+u32 Timer::getMonthMaxDay(u32 iYear, u32 iMonth) {
+    switch(iMonth) {
+    case 2:
+        return Timer::isLeapYear(iYear) ? 29 : 28;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return 30;
+    default:
+        break;
+    }
+    return 31;
+}
+
+
+} // end namespace app

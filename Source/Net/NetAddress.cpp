@@ -196,4 +196,239 @@ bool NetAddress::setIP(bool ipv6) {
     struct addrinfo hints;
     hints.ai_family = ipv6 ? AF_INET6 : AF_INET;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;    // IPPROTO_TCP; //0锛岄粯璁
+    hints.ai_protocol = IPPROTO_TCP;    // IPPROTO_TCP; //0，默认
+    hints.ai_flags = AI_PASSIVE;        //flags的标志很多,常用的有AI_CANONNAME;
+    hints.ai_addrlen = 0;
+    hints.ai_canonname = 0;
+    hints.ai_addr = 0;
+    hints.ai_next = 0;
+    s32 ret = ::getaddrinfo(host_name, 0, &hints, &head);
+    if(ret) {
+        return false;
+    }
+
+    usz len;
+    for(struct addrinfo* curr = head; curr; curr = curr->ai_next) {
+        if(AF_INET6 == curr->ai_family) {
+            mSize = sizeof(sockaddr_in6);
+            memcpy(mAddress, curr->ai_addr, curr->ai_addrlen);
+            mName[0] = '[';
+            inet_ntop(getAddress6()->sin6_family, &getAddress6()->sin6_addr, mName + 1, sizeof(mName) - 5);
+            mPort = ntohs(getAddress6()->sin6_port);
+            len = strlen(mName);
+            mName[len++] = ']';
+            mName[len++] = ':';
+            mName[len] = '0';
+            break;
+        }
+        if(AF_INET == curr->ai_family) {
+            mSize = sizeof(sockaddr_in);
+            memcpy(mAddress, curr->ai_addr, curr->ai_addrlen);
+            inet_ntop(getAddress4()->sin_family, &getAddress4()->sin_addr, mName, sizeof(mName));
+            mPort = ntohs(getAddress4()->sin_port);
+            len = strlen(mName);
+            mName[len++] = ':';
+            mName[len] = '0';
+            break;
+        }
+    } //for
+
+    ::freeaddrinfo(head);
+    return mSize > 0;
+}
+
+
+void NetAddress::setPort(u16 port) {
+    if(port != mPort) {
+        if(isIPV6()) {
+            getAddress6()->sin6_port = htons(port);
+        } else {
+            getAddress4()->sin_port = htons(port);
+        }
+        reverse();
+    }
+}
+
+
+u16 NetAddress::getPort()const {
+    return mPort;
+}
+
+
+void NetAddress::set(const s8* ip, u16 port, bool ipv6) {
+    if(ip && '\0' != ip[0]) {
+        clear();
+        init(ipv6);
+        mPort = port;
+        initPort();
+        setIP(ip, ipv6);
+    }
+}
+
+void NetAddress::setAddrSize(usz sz) {
+    mSize = (u8)sz;
+    if (sizeof(sockaddr_in6) == mSize) {
+        getAddress6()->sin6_family = AF_INET6;
+    } else {
+        getAddress4()->sin_family = AF_INET;
+    }
+}
+
+void NetAddress::setIPort(const s8* ipAndPort) {
+    if(nullptr == ipAndPort) {
+        return;
+    }
+    clear();
+    memcpy(mName, ipAndPort, AppMin(sizeof(mName) - 1, strlen(ipAndPort)));
+    s8* curr = mName;
+    if('[' == curr[0]) {//ipv6
+        mSize = sizeof(sockaddr_in6);
+        getAddress6()->sin6_family = AF_INET6;
+        while(*curr != ']' && *curr != '\0') {
+            ++curr;
+        }
+        s8 bk = curr[0];
+        curr[0] = 0;
+        inet_pton(AF_INET6, mName + 1, &(getAddress6()->sin6_addr));
+        curr[0] = bk;
+        if(curr[0] == ']' && curr[1] == ':') {
+            mPort = (u16)App10StrToU32(curr + 2);
+            initPort();
+        } else {
+            DASSERT(0);
+            return;
+        }
+    } else {
+        mSize = sizeof(sockaddr_in);
+        getAddress4()->sin_family = AF_INET;
+        while (*curr != ':' && *curr != '\0') {
+            ++curr;
+        }
+        s8 bk = curr[0];
+        curr[0] = 0;
+        inet_pton(AF_INET, mName, &(getAddress4()->sin_addr));
+        curr[0] = bk;
+        if(curr[0] == ':') {
+            mPort = (u16)App10StrToU32(++curr);
+            initPort();
+        } else {
+            DASSERT(0);
+            return;
+        }
+    }
+}
+
+
+void NetAddress::setDomain(const s8* iDNS, bool ipv6) {
+    if(!iDNS) {
+        return;
+    }
+
+    struct addrinfo* head = 0;
+    struct addrinfo hints;
+    ::memset(&hints, 0, sizeof(hints));
+    hints.ai_family = ipv6 ? AF_INET6 : AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    if(getaddrinfo(iDNS, 0, &hints, &head)) {
+        return;
+    }
+
+    for(struct addrinfo* curr = head; curr; curr = curr->ai_next) {
+        if(AF_INET6 == curr->ai_family) {
+            mSize = sizeof(sockaddr_in6);
+            memcpy(mAddress, curr->ai_addr, curr->ai_addrlen);
+            getAddress6()->sin6_port = htons(mPort);
+            reverse();
+            break;
+        }
+        if(AF_INET == curr->ai_family) {
+            mSize = sizeof(sockaddr_in);
+            memcpy(mAddress, curr->ai_addr, curr->ai_addrlen);
+            getAddress4()->sin_port = htons(mPort);
+            reverse();
+            break;
+        }
+    } //for
+
+    ::freeaddrinfo(head);
+}
+
+
+NetAddress::IP NetAddress::toIP()const {
+    IP id;
+    if(isIPV6()) { //128bit
+        DASSERT(sizeof(IP) == sizeof(getAddress6()->sin6_addr));
+        id = &getAddress6()->sin6_addr;
+    } else { //32bit
+        DASSERT(sizeof(u32) == sizeof(getAddress4()->sin_addr));
+        *(u32*)(&id) = (*(u32*)(&getAddress4()->sin_addr));
+    }
+    return id;
+}
+
+
+NetAddress::ID NetAddress::toID()const {
+    ID id;
+    if(isIPV6()) { //128bit
+        DASSERT(sizeof(IP) == sizeof(getAddress6()->sin6_addr));
+        id = &getAddress6()->sin6_addr;
+    } else { //32bit
+        DASSERT(sizeof(u32) == sizeof(getAddress4()->sin_addr));
+        id.mHigh = (*(u32*)(&getAddress4()->sin_addr));
+    }
+    id.mTail = mPort;
+    return id;
+}
+
+
+void NetAddress::setAddress6(const sockaddr_in6& it) {
+    *getAddress6() = it;
+    reverse();
+}
+
+void NetAddress::setAddress4(const sockaddr_in& it) {
+    *getAddress4() = it;
+    reverse();
+}
+
+
+void NetAddress::reverse() {
+    memset(mName, 0, sizeof(mName));
+    sockaddr& addr = *(sockaddr*)mAddress;
+    usz len;
+    if(AF_INET6 == addr.sa_family) {
+        mPort = ntohs(getAddress6()->sin6_port);
+        mSize = (u8)sizeof(sockaddr_in6);
+        mName[0] = '[';
+        inet_ntop(getAddress6()->sin6_family, &getAddress6()->sin6_addr, mName + 1, sizeof(mName) - 4);
+        len = strlen(mName);
+        mName[len++] = ']';
+    } else {
+        mPort = ntohs(getAddress4()->sin_port);
+        mSize = (u8)sizeof(sockaddr_in);
+        inet_ntop(getAddress4()->sin_family, &getAddress4()->sin_addr, mName, sizeof(mName) - 1);
+        memset(mAddress + mSize, 0, sizeof(mAddress) - mSize);
+        len = strlen(mName);
+    }
+    snprintf(mName + len, sizeof(mName) - len, ":%d", mPort);
+}
+
+
+s32 NetAddress::convertStr2IP(const s8* buffer, IP& result, bool ipv6) {
+    DASSERT(buffer);
+    return inet_pton(ipv6 ? AF_INET6 : AF_INET, buffer, &result);
+}
+
+
+void NetAddress::convertIP2Str(const IP& ip, String& result, bool ipv6) {
+    result.reserve(DIP_STR_MAX_SIZE);
+    ::inet_ntop(ipv6 ? AF_INET6 : AF_INET, &ip, (s8*)result.c_str(), DIP_STR_MAX_SIZE);
+    result.setLen(strlen(result.c_str()));
+}
+
+
+}//namespace net
+}//namespace app
+

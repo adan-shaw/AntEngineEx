@@ -174,7 +174,7 @@ private:
     mutable s32 mGrabCount; //=HandleCount
     s32 mMaxEvents;
     s32 mStop;
-    BinaryHeap mTimeHub;    //鏈€灏忓爢鐢ㄤ簬绠＄悊瓒呮椂浜嬩欢
+    BinaryHeap mTimeHub;    //最小堆用于管理超时事件
     Node2 mHandleActive;
     Node2 mHandleClose;
     RequestFD* mRequest;

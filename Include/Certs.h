@@ -89,7 +89,7 @@ static const s8* G_SERVER_KEY =
 
 
 
-// DigiCert Global Root CA cert, æµè§ˆå™¨ä¸­å¯¼å‡ºçš„è¯ä¹¦
+// DigiCert Global Root CA cert, ä¯ÀÀÆ÷ÖÐµ¼³öµÄÖ¤Êé
 static const s8* G_CA_CERT =
 "-----BEGIN CERTIFICATE-----\n"
 "MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\n"
@@ -115,7 +115,7 @@ static const s8* G_CA_CERT =
 "-----END CERTIFICATE-----\n";
 
 
-//GlobalSign Root CA, æµè§ˆå™¨ä¸­å¯¼å‡ºçš„è¯ä¹¦
+//GlobalSign Root CA, ä¯ÀÀÆ÷ÖÐµ¼³öµÄÖ¤Êé
 static const s8* G_CA_CERT1 =
 "-----BEGIN CERTIFICATE-----\n"
 "MIIDdTCCAl2gAwIBAgILBAAAAAABFUtaw5QwDQYJKoZIhvcNAQEFBQAwVzELMAkG\n"
@@ -141,7 +141,7 @@ static const s8* G_CA_CERT1 =
 
 
 
-//trusted Root CA cert, è‡ªç”¨æµ‹è¯•
+//trusted Root CA cert, ×ÔÓÃ²âÊÔ
 static const s8* G_CA_ROOT_CERT =
 "-----BEGIN CERTIFICATE-----\n"
 "MIID7zCCAtegAwIBAgIUPI6E5oROadR04LQU7h9iiVr7/w0wDQYJKoZIhvcNAQEL\n"

@@ -249,4 +249,71 @@ DFINLINE u64 AppSwap64(u64 it) {
 
 
 /**
-* @param bytes 寰呭
+* @param bytes 待对字节数
+* @param num 对齐单位(必须是2的幂次方)
+* @return 对齐字节数
+*/
+DFINLINE usz AppAlignSize(usz bytes, usz num) {
+    return (bytes + (num - 1)) & (~(num - 1));
+}
+
+
+/**
+* @param pot 待对齐指针
+* @param num 对齐单位(必须是2的幂次方)
+* @return 对齐指针
+*/
+template<class T>
+DFINLINE T* AppAlignPoint(T* pot, usz num) {
+    return (T*)(((size_t)(pot)+(num - 1)) & (~(num - 1)));
+}
+
+
+
+template <class T>
+DFINLINE void AppSwap(T& a, T& b) {
+    T c = a;
+    a = b;
+    b = c;
+}
+
+
+#define DMIN(a,b) ((a) < (b) ? (a) : (b))
+#define DMAX(a,b) ((a) > (b) ? (a) : (b))
+#define DCLAMP(V,L,H) (DMIN(DMAX(V, L), H))
+
+template<class T>
+DFINLINE const T& AppMin(const T& a, const T& b) {
+    return a < b ? a : b;
+}
+
+
+template<class T>
+DFINLINE const T& AppMax(const T& a, const T& b) {
+    return a < b ? b : a;
+}
+
+
+template <class T>
+DFINLINE const T& AppClamp(const T& value, const T& low, const T& high) {
+    return AppMin(AppMax(value, low), high);
+}
+
+
+DFINLINE bool AppIsBitON(const void* a, usz i) {
+    return !!(((unsigned char*)a)[i >> 3] & (1 << (i & 7)));
+}
+
+DFINLINE void AppSetBitON(void* a, usz i) {
+    ((unsigned char*)a)[i >> 3] |= (1 << (i & 7));
+}
+
+DFINLINE void AppSetBitOFF(void* a, usz i) {
+    ((unsigned char*)a)[i >> 3] &= ~(1 << (i & 7));
+}
+
+
+}//namespace app
+
+#endif	//APP_CONFIG_H
+

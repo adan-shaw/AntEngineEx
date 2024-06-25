@@ -269,4 +269,125 @@ void MurmurHash3_x64_128(const void* key, const u64 len, const u32 seed, void* o
     ((u64*)out)[1] = h2;
 }
 
-//閽堝
+//针对64位处理器的Murmur哈希
+u64 MurmurHash_x64(const void* key, u64 len, u32 seed) {
+    const u64 m = 0xc6a4a7935bd1e995;
+    const int r = 47;
+
+    u64 h = seed ^ (len * m);
+
+    const u64* data = (const u64*)key;
+    const u64* end = data + (len / 8);
+
+    while(data != end) {
+        u64 k = *data++;
+
+        k *= m;
+        k ^= k >> r;
+        k *= m;
+
+        h ^= k;
+        h *= m;
+    }
+
+    const u8* data2 = (const u8*)data;
+
+    switch(len & 7) {
+    case 7: h ^= u64(data2[6]) << 48;
+    case 6: h ^= u64(data2[5]) << 40;
+    case 5: h ^= u64(data2[4]) << 32;
+    case 4: h ^= u64(data2[3]) << 24;
+    case 3: h ^= u64(data2[2]) << 16;
+    case 2: h ^= u64(data2[1]) << 8;
+    case 1: h ^= u64(data2[0]);
+        h *= m;
+    };
+
+    h ^= h >> r;
+    h *= m;
+    h ^= h >> r;
+
+    return h;
+}
+
+//针对32位处理器的Murmur哈希
+u64 MurmurHash_x86(const void* key, u64 len, u32 seed) {
+    const u32 m = 0x5bd1e995U;
+    const int r = 24;
+
+    u32 h1 = (u32)(seed ^ len);
+    u32 h2 = 0;
+
+    const u32* data = (const u32*)key;
+
+    while(len >= 8) {
+        u32 k1 = *data++;
+        k1 *= m; k1 ^= k1 >> r; k1 *= m;
+        h1 *= m; h1 ^= k1;
+        len -= 4;
+
+        u32 k2 = *data++;
+        k2 *= m; k2 ^= k2 >> r; k2 *= m;
+        h2 *= m; h2 ^= k2;
+        len -= 4;
+    }
+
+    if(len >= 4) {
+        u32 k1 = *data++;
+        k1 *= m; k1 ^= k1 >> r; k1 *= m;
+        h1 *= m; h1 ^= k1;
+        len -= 4;
+    }
+
+    switch(len) {
+    case 3: h2 ^= ((u8*)data)[2] << 16;
+    case 2: h2 ^= ((u8*)data)[1] << 8;
+    case 1: h2 ^= ((u8*)data)[0];
+        h2 *= m;
+    };
+
+    h1 ^= h2 >> 18; h1 *= m;
+    h2 ^= h1 >> 22; h2 *= m;
+    h1 ^= h2 >> 17; h1 *= m;
+    h2 ^= h1 >> 19; h2 *= m;
+
+    u64 h = h1;
+
+    h = (h << 32) | h2;
+
+    return h;
+}
+
+
+//hash seed: Murmur, 种子最好用一个质数
+static u32 G_HASH_SEED_MMUR = 0xEE6B27EBU;  //一个40亿内的质数
+
+void AppSetHashSeedMurmur(const u32 seed) {
+    G_HASH_SEED_MMUR = seed;
+}
+
+u32& AppGetHashSeedMurmur() {
+    return G_HASH_SEED_MMUR;
+}
+
+u32 AppHashMurmur32(const void* buf, u64 len) {
+    return MurmurHash3_x86_32(buf, len, G_HASH_SEED_MMUR);
+}
+
+u64 AppHashMurmur64(const void* buf, u64 len) {
+#ifdef DOS_64BIT
+    return MurmurHash_x64(buf, len, G_HASH_SEED_MMUR);
+#else
+    return MurmurHash_x86(buf, len, G_HASH_SEED_MMUR);
+#endif
+}
+
+void AppHashMurmur128(const void* buf, u64 len, void* out) {
+#ifdef DOS_64BIT
+    MurmurHash3_x64_128(buf, len, G_HASH_SEED_MMUR, out);
+#else
+    MurmurHash3_x86_128(buf, len, G_HASH_SEED_MMUR, out);
+#endif
+}
+
+}//namespace app

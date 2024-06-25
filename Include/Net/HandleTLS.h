@@ -139,21 +139,21 @@ protected:
 
     void uninit();
 
-    //è§£å¯†æ–‡
+    //½âÃÜÎÄ
     void doRead();
 
-    //å†™å¯†æ–‡
+    //Ğ´ÃÜÎÄ
     s32 postWrite();
 
-    //è¯»å¯†æ–‡
+    //¶ÁÃÜÎÄ
     s32 postRead();
 
-    //å›è°ƒè¯»åˆ°çš„æ˜æ–‡
+    //»Øµ÷¶Áµ½µÄÃ÷ÎÄ
     void landReads() {
         landQueue(mLandReads);
     }
 
-    //å›è°ƒå†™å®Œçš„æ˜æ–‡
+    //»Øµ÷Ğ´ÍêµÄÃ÷ÎÄ
     void landWrites() {
         landQueue(mLandWrites);
     }

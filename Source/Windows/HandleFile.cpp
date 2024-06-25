@@ -84,17 +84,17 @@ s32 HandleFile::open(const String& fname, s32 flag) {
     fmode |= (flag & 2) > 0 ? FILE_SHARE_WRITE : 0;
 
     /*
-     * CREATE_NEW åˆ›å»ºæ–‡ä»¶ï¼›å¦‚æ–‡ä»¶å­˜åœ¨åˆ™ä¼šå‡ºé”™
-     * CREATE_ALWAYS åˆ›å»ºæ–‡ä»¶ï¼Œä¼šæ”¹å†™å‰ä¸€ä¸ªæ–‡ä»¶
-     * OPEN_EXISTING æ–‡ä»¶å¿…é¡»å·²ç»å­˜åœ¨ã€‚ç”±è®¾å¤‡æå‡ºè¦æ±‚
-     * OPEN_ALWAYS å¦‚æ–‡ä»¶ä¸å­˜åœ¨åˆ™åˆ›å»ºå®ƒ
-     * TRUNCATE_EXISTING å°†çŽ°æœ‰æ–‡ä»¶ç¼©çŸ­ä¸ºé›¶é•¿åº¦
+     * CREATE_NEW ´´½¨ÎÄ¼þ£»ÈçÎÄ¼þ´æÔÚÔò»á³ö´í
+     * CREATE_ALWAYS ´´½¨ÎÄ¼þ£¬»á¸ÄÐ´Ç°Ò»¸öÎÄ¼þ
+     * OPEN_EXISTING ÎÄ¼þ±ØÐëÒÑ¾­´æÔÚ¡£ÓÉÉè±¸Ìá³öÒªÇó
+     * OPEN_ALWAYS ÈçÎÄ¼þ²»´æÔÚÔò´´½¨Ëü
+     * TRUNCATE_EXISTING ½«ÏÖÓÐÎÄ¼þËõ¶ÌÎªÁã³¤¶È
      */
     DWORD cmod = (flag & 4) > 0 ? OPEN_ALWAYS : OPEN_EXISTING;
 
     /*
-     * ä½¿ç”¨FILE_FLAG_NO_BUFFERINGæ—¶ï¼Œæœ‰ä¸¥æ ¼è¦æ±‚ï¼Œ
-     * è¯»å†™èµ·å§‹åç§»é‡åŠå†™å…¥å¤§å°ï¼Œéœ€ä¸ºç£ç›˜æ‰‡åŒºå¤§å°æ•´æ•°å€ï¼Œå¦åˆ™å¤±è´¥
+     * Ê¹ÓÃFILE_FLAG_NO_BUFFERINGÊ±£¬ÓÐÑÏ¸ñÒªÇó£¬
+     * ¶ÁÐ´ÆðÊ¼Æ«ÒÆÁ¿¼°Ð´Èë´óÐ¡£¬ÐèÎª´ÅÅÌÉÈÇø´óÐ¡ÕûÊý±¶£¬·ñÔòÊ§°Ü
      * https://docs.microsoft.com/en-us/windows/win32/fileio/file-buffering
      */
     DWORD attr = FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED

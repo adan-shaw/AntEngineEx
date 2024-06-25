@@ -32,5 +32,48 @@
 namespace app {
 
 /**
- * @brief 寮曠敤璁℃暟
- *        涓嶆帹鑽愬
+ * @brief 引用计数
+ *        不推荐多重继承, 子类形成菱形继承时(多继承)注意需虚继承自此类, eg:
+ *        class SonA : virtual public TRefCount {};
+ *        class SonB : virtual public TRefCount {};
+ *        class Grandson : public SonA, public SonB {};
+ */
+template <class T>
+class TRefCount {
+public:
+    TRefCount() : mRefCount(1) {
+    }
+
+    virtual ~TRefCount() {
+        DASSERT(0 == mRefCount);
+    }
+
+    s32 getRefCount() const {
+        return mRefCount;
+    }
+
+    virtual void grab() const {
+        DASSERT(mRefCount > 0);
+        ++mRefCount;
+    }
+
+    virtual s32 drop() const {
+        DASSERT(mRefCount > 0);
+        s32 ret = --mRefCount;
+        if (0 == ret) {
+            delete this;
+        }
+        return ret;
+    }
+
+private:
+    mutable T mRefCount;
+};
+
+
+using RefCount = TRefCount<s32>;
+using RefCountAtomic = TRefCount<std::atomic<s32>>;
+
+} //namespace app
+
+#endif //APP_REFCOUNT_H

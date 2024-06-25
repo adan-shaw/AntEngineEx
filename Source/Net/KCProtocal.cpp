@@ -1212,4 +1212,17 @@ void KCProtocal::setWindowSize(s32 sndwnd, s32 rcvwnd) {
 }
 
 
-s32 KCProtocal::getWa
+s32 KCProtocal::getWaitSend() const {
+    return mSendBufCount + mSendQueueCount;
+}
+
+
+u32 KCProtocal::getConv(const void* ptr) {
+    u32 conv;
+    decodeU32((const s8*)ptr, &conv);
+    return conv;
+}
+
+
+} // namespace net
+} // namespace app

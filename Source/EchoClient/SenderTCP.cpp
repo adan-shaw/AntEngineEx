@@ -55,7 +55,7 @@ s32 SenderTCP::onTimeout(HandleTime& it) {
     tick->mUsed = head->mSize;
     if (0 != writeIF(tick)) {
         RequestFD::delRequest(tick);
-        //@note: 姝ゆ椂,涓嶇鏄惁璋冪敤close handle锛岀殕蹇呴』杩斿洖EE_ERROR
+        //@note: 此时,不管是否调用close handle，皆必须返回EE_ERROR
         return EE_ERROR;
     }
 
