@@ -26,9 +26,15 @@ cd ..
 # 再build project
 mkdir build
 cd ./build
-cmake ..
+cmake -G "Unix Makefiles" .. -DCMAKE_BUILD_TYPE:STRING=RELEASE
 make -j4
 cd ..
+
+
+
+# 补全lib 库
+cd ./Lib/Linux
+ln -s ../../Depend/lua/src/liblua.a
 
 
 

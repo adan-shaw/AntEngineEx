@@ -5,10 +5,10 @@ CXX = g++
 CXX_FLAGS = -std=c++11 -m64 
 
 ifeq ($(DEBUG),true)
-	CXX_FLAGS += -ggdb -O0
+	CXX_FLAGS += -g3 -O0
 	BUILD_TYPE = debug
 else ifeq ($(DEBUG),false)
-	CXX_FLAGS += -ggdb -O3
+	CXX_FLAGS += -g3 -O3
 	BUILD_TYPE = releaseSymbol
 else
 	CXX_FLAGS += -O3
@@ -17,11 +17,11 @@ endif
 
 # include paths
 INC_DIR = -I$(BUILD_DIR)/Include \
-		  -I$(BUILD_DIR)/Depend/http_parser \
-		  -I$(BUILD_DIR)/Depend/jsoncpp \
-		  -I$(BUILD_DIR)/Depend/openssl \
-		  -I$(BUILD_DIR)/Depend/lua/src \
-		  -I/usr/include/mysql \
+		-I$(BUILD_DIR)/Depend/http_parser \
+		-I$(BUILD_DIR)/Depend/jsoncpp \
+		-I$(BUILD_DIR)/Depend/openssl \
+		-I$(BUILD_DIR)/Depend/lua/src \
+		-I/usr/include/mysql \
 
 
 SRCS = $(wildcard *.cpp)
@@ -54,7 +54,7 @@ all:TEMP_DIR $(DEPS) $(OBJS) $(BIN)
 
 
 ifneq ("$(wildcard $(DEPS))","")
-	-@include $(DEPS)  
+	-@include $(DEPS)
 endif
 
 

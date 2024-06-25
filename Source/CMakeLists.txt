@@ -15,6 +15,9 @@ aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/Net/RedisClient" SRC_REDIS)
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/${APP_OS}" SRC_OS)
 aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/http_parser" SRC_HTTPARSER)
 aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/jsoncpp" SRC_JSON)
+aux_source_directory("${PROJECT_SOURCE_DIR}/Lib/Linux" SRC_LUA)
+#aux_source_directory("${PROJECT_SOURCE_DIR}/Depend/lua/src" SRC_LUA)
+aux_source_directory("${PROJECT_SOURCE_DIR}/Lib/Linux" SRC_AntEngine)
 
 link_directories(${LIBRARY_OUTPUT_PATH})
 
@@ -27,6 +30,8 @@ add_library(${PRO_NAME} STATIC
     ${SRC_JSON}
     ${SRC_SCRIPT}
     ${SRC_HTTPARSER}
+    ${SRC_LUA}
+    ${SRC_AntEngine}
     )
 
 include_directories(
