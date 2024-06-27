@@ -29,6 +29,9 @@ cmake target:
 	./Source/CMakeLists.txt
 	./Source/Test/CMakeLists.txt
 
+如果第一次build 失败, 可以再次尝试Build again, ./Lib/Linux 经常不能及时刷出来, 重复再build 一次即可解决问题;
+(ps: 部分库是本project 自己生成的, 所以再build 一次才能看见)
+
 
 
 
