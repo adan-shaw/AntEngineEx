@@ -17,16 +17,20 @@ if (${APP_OS} MATCHES "Linux")
     target_link_libraries(${PRO_NAME} pthread)
     target_link_libraries(${PRO_NAME} "crypto")
     target_link_libraries(${PRO_NAME} "ssl")
+    target_link_libraries(${PRO_NAME} "lua")
+    target_link_libraries(${PRO_NAME} "http_parser")
 else()
     target_link_libraries(${PRO_NAME} shlwapi)
     target_link_libraries(${PRO_NAME} ws2_32)
     target_link_libraries(${PRO_NAME} "libcrypto")
     target_link_libraries(${PRO_NAME} "libssl")
+    target_link_libraries(${PRO_NAME} "liblua")
+    target_link_libraries(${PRO_NAME} "libhttp_parser")
 endif()
 target_link_libraries(${PRO_NAME} debug "AntEngine-${APP_BTYPE}D")
 target_link_libraries(${PRO_NAME} optimized "AntEngine-${APP_BTYPE}")
-#CMAKE_INTDIR
 
+#CMAKE_INTDIR
 include_directories(
     ${PROJECT_SOURCE_DIR}/Depend/http_parser
     ${PROJECT_SOURCE_DIR}/Depend/jsoncpp

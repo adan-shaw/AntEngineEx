@@ -24,6 +24,11 @@
 ./Source:
 	source files of this project
 
+cmake target:
+	./CMakeLists.txt
+	./Source/CMakeLists.txt
+	./Source/Test/CMakeLists.txt
+
 
 
 
