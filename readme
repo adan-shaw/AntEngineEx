@@ -1,0 +1,38 @@
+#
+# 1.path introduce
+#
+./Bin:
+	* config
+	* app server(lua)
+	* web server(lua)
+
+./build:
+	cmake tempfiles for unix
+
+./Build4win:
+	cmake tempfiles for windows
+
+./Depend:
+	dependent files of son projects
+
+./Include:
+	dependent headfiles for this project
+
+./Lib:
+	dependent library files output path
+
+./Source:
+	source files of this project
+
+
+
+
+
+#
+# 2.project introduce
+#
+这个项目是一个应用app/web app server, 带https 加密方案的server 框架?
+
+可以便捷开发小型app/web server?
+
+有待探讨!!

@@ -43,7 +43,7 @@ cd ..
 # 补全lib 库
 cd ./Lib/Linux
 ln -s ../../Depend/lua/src/liblua.a
-ln -s ../../Depend/http-parser/src/libhttp-parser.a
+ln -s ../../Depend/http-parser/libhttp_parser.a
 
 
 
