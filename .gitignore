@@ -12,6 +12,7 @@ build
 *.a
 *.so
 *.dll
+*.swp
 Bin/*.bin
 Bin/*.dll
 Bin/*.pdb
